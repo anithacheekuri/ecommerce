@@ -10,7 +10,29 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+use Illuminate\Support\Facades\Input;
+use App\Product;
 
+
+Route::any('/search', function () {
+    $q = Input::get('q');
+   
+    if($q != ""){
+    
+      $producut =Product::where('name','Like', "%" . $q . "%")
+                     ->orwhere('description','Like', "%" . $q . "%")
+                     ->get();
+     
+                     if(count($producut)>0){
+                               
+                         return view('shopping')->withDetails($producut)->withQuery($q);
+                     }
+                    
+                    
+    }
+    return view('shopping')->withMessage("no user data");
+ });
+ 
 Route::get('/', function () {
     return view('welcome');
 });
@@ -29,6 +51,16 @@ Route::resource('orders', 'OrderController');
 Route::get('paypal/checkout/{order}', 'PayPalController@getExpressCheckout')->name('paypal.checkout');
 Route::get('paypal/checkout-success/{order}', 'PayPalController@getExpressCheckoutSuccess')->name('paypal.success');
 Route::get('paypal/checkout-cancel', 'PayPalController@cancelPage')->name('paypal.cancel');
+
+/////////
+
+Route::any('wel', 'PayPalController@wel')->name('wel');
+Route::get('payment', 'PayPalController@payment')->name('payment');
+Route::get('cancel', 'PayPalController@cancel')->name('payment.cancel');
+Route::get('payment/success', 'PayPalController@success')->name('payment.success');
+
+
+/////////
 /*
 Route::redirect('/', '/home');
 

@@ -24,7 +24,7 @@ class Signin extends Controller
 
    public function dashboard(Request $request){
 
-   $producuts = product::take('3')->get();
+   $producuts = product::take('5')->get();
 
   
       //$producuts = DB::table('producuts')->get();
